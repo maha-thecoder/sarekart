@@ -2,6 +2,12 @@ import { sarees } from "./saredetails";
 import './card.css'
 
 export default function Cards() {
+
+    const addtocart=(sareimg)=>{
+        localStorage.setItem("imgsrc",sareimg)
+        alert("saree added")
+
+    }
   return (
     <div className="container mt-5">
       <div className="row">
@@ -18,7 +24,7 @@ export default function Cards() {
                 style={{ height: "400px", objectFit: "cover" }}
               />
               <div className="box">
-                <p className="add-cart">Add To Cart</p>
+                <p className="add-cart" onClick={()=>addtocart(saree.sareimg)}>Add To Cart</p>
                 <p className="buy-now">Buy Now</p>
               </div>
 
