@@ -1,7 +1,9 @@
 
 
 import './navbar.css'
+import { useNavigate } from 'react-router-dom'
 export default function Navbar(){
+  const history=useNavigate()
     return(
         <>
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -35,15 +37,15 @@ export default function Navbar(){
               <p className="nav-link" href="#">mahanth</p>
             </li>
             <li className="nav-item">
-              <a className="nav-link" aria-current="page" href="#">
+              <p className="nav-link" onClick={()=>history('/')}>
                 Home
-              </a>
+              </p>
             </li>
            
             
 
              <li className="nav-item">
-              <p className="nav-link profile" >
+              <p className="nav-link profile" onClick={()=>history('/cart-page')}>
                 Cart
               </p>
             </li>

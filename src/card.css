@@ -26,5 +26,28 @@
     background-color: violet;
 }
 
+.details{
+    margin: 1px;
+    padding: 1px;
+}
 
+.details .saree-name{
+    font-weight: 900;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.5rem;
+}
 
+.price-style{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.price-tag{
+    font-size: 1.5rem;
+    font-weight: 900;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.strike-price{
+    text-decoration: line-through;
+}
