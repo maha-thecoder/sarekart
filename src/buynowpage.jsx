@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCart } from "./utilities/cart";
+import axios from "axios";
 import "./buynowpage.css";
 
 export default function BuyNowPage() {
@@ -9,6 +10,7 @@ export default function BuyNowPage() {
   const [cart, setCart] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState("COD");
   const [total, setTotal] = useState(0);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const [address, setAddress] = useState({
     name: "",
@@ -20,8 +22,6 @@ export default function BuyNowPage() {
     state: "",
     pincode: ""
   });
-   
-   
 
   // Load cart & calculate total
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function BuyNowPage() {
 
     let sum = 0;
     cartData.forEach(item => {
-      const price = Number(item.sareprice.replace("RS.", ""));
+      const price = Number(item.sareprice);
       sum += price * item.qty;
     });
 
@@ -42,190 +42,178 @@ export default function BuyNowPage() {
     setAddress({ ...address, [e.target.name]: e.target.value });
   };
 
-  // Proceed to payment
-  const proceedToPayment = () => {
-    localStorage.setItem("deliveryAddress", JSON.stringify(address));
-    navigate("/payment");
+  // Proceed to payment (save address to backend then navigate)
+  const proceedToPayment = async () => {
+    try {
+      setIsProcessing(true);
+       const API_BASE_URL = window.location.hostname === 'localhost'
+  ? 'http://localhost:4000'
+  : 'https://sare-kart-backend.onrender.com';
+const res = await axios.post(`${API_BASE_URL}/api/v1/sarekart/useradress`,address);
+      const savedAddress = res.data || address;
+      localStorage.setItem("deliveryAddress", JSON.stringify(savedAddress));
+      navigate("/payment");
+    } catch (err) {
+      console.error(err);
+      alert('Failed to save address. Please try again.');
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   if (cart.length === 0) {
     return <h3 className="text-center mt-5">No items to checkout</h3>;
   }
 
-   // Place order
-  const placeOrder = () => {
+ // Place order
+  const placeOrder = async () => {
     const orderData = {
       cart,
       total,
       address,
       paymentMethod
     };
-}
+    try {
+      setIsProcessing(true);
+       const API_BASE_URL = window.location.hostname === 'localhost'
+  ? 'http://localhost:4000'
+  : 'https://sare-kart-backend.onrender.com';
+const res = await axios.post(`${API_BASE_URL}/api/v1/sarekart/createorder`,orderData);
+      const placedOrder = res.data || orderData;
+      localStorage.setItem("latestOrder", JSON.stringify(placedOrder));
+      navigate('/order-confirm');
+    } catch (err) {
+      console.error(err);
+      alert('Failed to place order. Please try again.');
+    } finally {
+      setIsProcessing(false);
+    }
+  }
 
   return (
-    <div className="container mt-4">
-      <h2>Buy Now</h2>
+    <div className="buy-container container mt-4">
+      <h2 className="buynow-title">Buy Now</h2>
 
-      {/* PRODUCT SUMMARY */}
-      {cart.map(item => {
-        const price = Number(item.sareprice.replace("RS.", ""));
-        const itemTotal = price * item.qty;
+      <div className="buy-grid">
+        <div className="products-col">
+          <div className="products-card">
+            <h4 className="section-title">Order Summary</h4>
 
-        return (
-          <div
-            key={item.id}
-            className="row border p-2 mb-3 align-items-center"
-          >
-            <div className="col-md-2">
-              <img
-                src={item.sareimg}
-                width="70"
-                height="70"
-                style={{ objectFit: "cover" }}
+            {cart.map(item => {
+              const price = Number(item.sareprice);
+              const itemTotal = price * item.qty;
+
+              return (
+                <div key={item._id} className="product-row">
+                  <img src={item.sareimg} alt={item.sarename} />
+                  <div className="product-info">
+                    <div className="prod-name">{item.sarename}</div>
+                    <div className="prod-qty">Qty: {item.qty}</div>
+                  </div>
+                  <div className="prod-price">RS.{itemTotal}</div>
+                </div>
+              );
+            })}
+
+            <div className="cart-total">
+              <div>Cart Total</div>
+              <div className="cart-total-amt">RS.{total}</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="form-col">
+          <div className="form-card">
+            <h4 className="section-title">Delivery Address</h4>
+
+            <div className="form-row">
+              <input
+                className="form-control"
+                name="name"
+                placeholder="Full Name"
+                value={address.name}
+                onChange={handleChange}
+              />
+              <input
+                className="form-control"
+                name="mobile"
+                placeholder="Mobile Number"
+                value={address.mobile}
+                onChange={handleChange}
               />
             </div>
 
-            <div className="col-md-4">
-              <strong>{item.sarename}</strong>
-              <p>Qty: {item.qty}</p>
+            <div className="form-row">
+              <input
+                className="form-control"
+                name="landmark"
+                placeholder="Landmark"
+                value={address.landmark}
+                onChange={handleChange}
+              />
+              <input
+                className="form-control"
+                name="village"
+                placeholder="Village / Town"
+                value={address.village}
+                onChange={handleChange}
+              />
             </div>
 
-            <div className="col-md-3">
-              <p>{item.sareprice}</p>
+            <div className="form-row">
+              <input
+                className="form-control"
+                name="mandal"
+                placeholder="Mandal"
+                value={address.mandal}
+                onChange={handleChange}
+              />
+              <input
+                className="form-control"
+                name="district"
+                placeholder="District"
+                value={address.district}
+                onChange={handleChange}
+              />
             </div>
 
-            <div className="col-md-3">
-              <strong>RS.{itemTotal}</strong>
+            <div className="form-row">
+              <input
+                className="form-control"
+                name="state"
+                placeholder="State"
+                value={address.state}
+                onChange={handleChange}
+              />
+              <input
+                className="form-control"
+                name="pincode"
+                placeholder="Pincode"
+                value={address.pincode}
+                onChange={handleChange}
+              />
             </div>
-          </div>
-        );
-      })}
 
-      <h4 className="mt-3">
-        Cart Total: <strong>RS.{total}</strong>
-      </h4>
+            <h4 className="mt-3">Choose Payment Method</h4>
+            <div className="payment-row">
+              <label className={`payment-pill ${paymentMethod === 'COD' ? 'active' : ''}`}>
+                <input type="radio" name="payment" checked={paymentMethod === "COD"} onChange={() => setPaymentMethod("COD")} />
+                Cash on Delivery
+              </label>
 
-      <hr />
+              
+            </div>
 
-      {/* DELIVERY ADDRESS */}
-      <h3>Delivery Address</h3>
-      <div className="border p-3 rounded mb-4">
-
-        <div className="row mb-2 ">
-          <div className="col-md-6 mb-4">
-            <input
-              className="form-control"
-              name="name"
-              placeholder="Full Name"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="col-md-6 mb-4">
-            <input
-              className="form-control"
-              name="mobile"
-              placeholder="Mobile Number"
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div className="row ">
-          <div className="col-md-6 mb-4">
-            <input
-              className="form-control"
-              name="landmark"
-              placeholder="Landmark"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="col-md-6 mb-4">
-            <input
-              className="form-control"
-              name="village"
-              placeholder="Village / Town"
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-md-4 mb-4">
-            <input
-              className="form-control"
-              name="mandal"
-              placeholder="Mandal"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="col-md-4 mb-4">
-            <input
-              className="form-control"
-              name="district"
-              placeholder="District"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="col-md-4 mb-4">
-            <input
-              className="form-control"
-              name="state"
-              placeholder="State"
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-md-4 mb-4">
-            <input
-              className="form-control"
-              name="pincode"
-              placeholder="Pincode"
-              onChange={handleChange}
-            />
+            <div className="actions">
+              
+              <button className="btn btn-primary place-btn" onClick={placeOrder} disabled={isProcessing}>
+                {isProcessing ? 'Processing...' : 'Place Order'}
+              </button>
+            </div>
           </div>
         </div>
       </div>
-      
-      {/* PAYMENT METHOD */}
-      <h3>Choose Payment Method</h3>
-      <div className="border p-3 rounded mb-4">
 
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="radio"
-            name="payment"
-            checked={paymentMethod === "COD"}
-            onChange={() => setPaymentMethod("COD")}
-          />
-          <label className="form-check-label">
-            Cash on Delivery
-          </label>
-        </div>
-
-        <div className="form-check mt-2">
-          <input
-            className="form-check-input"
-            type="radio"
-            name="payment"
-            checked={paymentMethod === "ONLINE"}
-            onChange={() => setPaymentMethod("ONLINE")}
-          />
-          <label className="form-check-label">
-            Pay Online
-          </label>
-        </div>
-
-      </div>
-
-      {/* PLACE ORDER */}
-      <button className="btn btn-success" onClick={placeOrder}>
-        Place Order
-      </button>
-
-    
     </div>
   );
 }

@@ -40,6 +40,19 @@ export const addingitems=(product)=>{
         return sum
     }
 
+    export const singleitemprice=(id)=>{
+        
+        const cart=getCart()
+        const item = cart.find(i => i.id === id)
+        if (!item) return 0
+
+        const price = Number((item.sareprice || "").toString().replace("RS.", "")) || 0
+        const qty = Number(item.qty) || 1
+
+        return price * qty
+
+    }
+
     export const clearCart=()=>{
         localStorage.removeItem("sarees")
     }

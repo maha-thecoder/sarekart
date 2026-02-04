@@ -4,6 +4,7 @@ import {
   removeFromCart,
   
   savecart,
+  singleitemprice,
   
  
   clearCart
@@ -50,7 +51,7 @@ export default function Cart() {
   let sum = 0;
 
   cart.forEach(item => {
-    const priceValue = Number(item.sareprice.replace("RS.", ""));
+    const priceValue = Number(item.sareprice);
     sum += priceValue * item.qty;
   });
 
@@ -61,73 +62,54 @@ export default function Cart() {
     return <h3 className="text-center mt-5">Cart is empty</h3>;
   }
 
-  return (
-    <div className="container mt-4">
-      <h2>My Cart</h2>
+ 
 
-      {cart.map(item => (
-        <div key={item.id} className="row border p-3 mb-3">
-          <div className="col-md-3">
-            <img src={item.sareimg} width="100%" />
-          </div>
+    return (
+      <div className="container mt-4">
+        <h2 className="cart-title">My Cart</h2>
 
-          <div className="col-md-6">
-            <h5>{item.sarename}</h5>
-            <p>{item.sareprice}</p>
+        {cart.map(item => {
+          const priceValue = Number(item.sareprice) || 0;
+          const qtyValue = Number(item.qty) || 1;
+          const itemTotal = priceValue * qtyValue;
 
-           
-          </div>
+          return (
+            <div key={item._id} className="cart-item border p-3 mb-3">
+              <div className="item-left">
+                <img src={item.sareimg} alt={item.sarename} />
+              </div>
 
-          <div className="col-md-3">
-            <button
-              className="btn btn-danger"
-              onClick={() => {
-                removeFromCart(item.id);
-                refresh();
-              }}
-            >
-              Remove
-            </button>
-          </div>
-           <div className="col-md-4">
-            <button
-              onClick={() => {
-                decreaseQty(item.id);
-                refresh()
-               
-              }}
-            >−</button>
+              <div className="item-mid">
+                <h5 className="item-name">{item.sarename}</h5>
+                <p className="item-price">{item.sareprice}</p>
+                <p className="item-sub">{item.wrongprice}</p>
+              </div>
 
-            <span style={{ margin: "0 10px" }}>{item.qty>0?item.qty:1}</span>
+              <div className="item-right">
+                <div className="qty-controls">
+                  <button className="qty-btn" onClick={() => { decreaseQty(item.id); refresh(); }}>−</button>
+                  <span className="qty-value">{qtyValue}</span>
+                  <button className="qty-btn" onClick={() => { increaseQty(item.id); refresh(); }}>+</button>
+                </div>
 
-            <button
-              onClick={() => {
-                increaseQty(item.id);
-                refresh()
-                
-              }}
-            >+</button>
-          </div>
+                <div className="item-total">{`RS.${itemTotal}`}</div>
+
+                <button className="btn btn-danger remove-btn" onClick={() => { removeFromCart(item.id); refresh(); }}>Remove</button>
+              </div>
+            </div>
+          )
+        })}
+
+
+        <div className="cart-summary d-flex justify-content-between align-items-center">
+          <button className="btn btn-warning" onClick={() => { clearCart(); refresh(); }}>Clear Cart</button>
+          <h4 className="summary-total">Total: <span className="total-amount">RS.{price}</span></h4>
         </div>
-        
-      ))}
 
-
-<h4>Total:{price}</h4>
-      
-
-      <button className="btn btn-warning" onClick={() => {
-        clearCart();
-        refresh();
-      }}>
-        Clear Cart
-      </button>
-
-      <div className="buy-opt" onClick={()=>history('/buy-now-page')}>
-        <div className="buy-now" style={{backgroundColor:"red"}}>
-          Buy Now
+        <div className="buy-opt" onClick={()=>history('/buy-now-page')}>
+          <div className="buy-now">Buy Now</div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
+          

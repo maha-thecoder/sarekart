@@ -34,7 +34,7 @@ export default function Navbar(){
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
 
               <li className="nav-item">
-              <p className="nav-link" href="#">mahanth</p>
+              <p className="nav-link" onClick={()=>history('/signup')}>mahanth</p>
             </li>
             <li className="nav-item">
               <p className="nav-link" onClick={()=>history('/')}>

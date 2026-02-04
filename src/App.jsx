@@ -5,7 +5,12 @@ import Carousel from './cariusel'
 import Cards from './cards'
 import Cartpage from './cartpage'
 import BuyNowPage from './buynowpage.jsx'
-import { Routes,Route } from 'react-router-dom'
+import Login from '../login/Login.jsx'
+import Signup from '../login/Signup.jsx'
+import AdminDashboard from './AdminDashboard'
+import AddSare from './AddSare'
+import { Routes,Route } from 'react-router-dom' 
+
 
 function App() {
   
@@ -21,6 +26,18 @@ function App() {
         <Cards/>
         </>
       }/>
+
+      <Route path='/signup' element={
+        <>
+        <Signup/>
+        </>
+      }/>
+
+      <Route path='/login' element={
+        <>
+        <Login/>
+        </>
+      }/>
     
     <Route path='/cart-page' element={
       <>
@@ -34,8 +51,20 @@ function App() {
       <BuyNowPage/>
       </>
     }/>
+
+    <Route path='/admin-orders' element={
+      <>
+      <AdminDashboard/>
+      </>
+    }/>
+
+    <Route path='/admin-add-saree' element={
+      <>
+      <AddSare/>
+      </>
+    }/>
     
-    </Routes>
+    </Routes> 
       
     </>
   )

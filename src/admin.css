@@ -1,0 +1,22 @@
+.admin-container { padding: 18px; }
+.admin-title { margin-bottom: 16px; }
+.order-card { border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; margin-bottom: 16px; background: #fff; }
+.order-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.order-meta div { margin-bottom:4px; }
+.order-body { display:flex; gap:16px; flex-wrap:wrap; }
+.order-items { flex: 1 1 400px; }
+.order-item { display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid #f0f0f0; }
+.order-item img { width:72px; height:72px; object-fit:cover; border-radius:6px; }
+.item-info { flex:1; }
+.item-name { font-weight:600; }
+.item-price { font-weight:700; }
+.order-address { flex: 0 0 260px; border-left:1px dashed #eee; padding-left:12px; }
+.muted { color:#666; font-size:12px; }
+
+.admin-actions { display:flex; gap:8px; align-items:center; }
+.admin-actions .btn { padding:6px 12px; }
+
+n.add-sare-form { max-width:560px; background:#fff; padding:18px; border-radius:8px; border:1px solid #eaeaea; }
+.add-sare-form .form-row { display:flex; gap:10px; margin-bottom:12px; }
+.add-sare-form .form-control { width:100%; }
+.add-sare-form .submit-row { display:flex; gap:10px; justify-content:flex-end; margin-top:12px; }
