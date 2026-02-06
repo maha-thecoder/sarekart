@@ -9,6 +9,7 @@ import Login from '../login/Login.jsx'
 import Signup from '../login/Signup.jsx'
 import AdminDashboard from './AdminDashboard'
 import AddSare from './AddSare'
+import OrderPage from './OrderPage'
 import { Routes,Route } from 'react-router-dom' 
 
 
@@ -61,6 +62,12 @@ function App() {
     <Route path='/admin-add-saree' element={
       <>
       <AddSare/>
+      </>
+    }/>
+
+    <Route path='/orders' element={
+      <>
+      <OrderPage/>
       </>
     }/>
     

@@ -11,7 +11,7 @@ export const savecart=(cart)=>{
 export const addingitems=(product)=>{
     const cart=getCart()
 
-    const index=cart.findIndex(item=>item.id===product.id)
+    const index=cart.findIndex(item=>item._id===product._id)
 
     if(index!==-1){
         alert("item already in cart")

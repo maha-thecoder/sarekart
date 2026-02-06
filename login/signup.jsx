@@ -9,21 +9,26 @@ export default function Signup() {
   const [formData, setFormData] = useState({
     username: "",
     phone: "",
-    password: ""
+   
   });
 
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+    setError(""); // Clear error on input change
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
+    setSuccess("");
     console.log("Signup Data:", formData);
 
     try {
@@ -33,21 +38,22 @@ export default function Signup() {
 
       const res = await axios.post(
         `${API_BASE_URL}/api/v1/sarekart/signup`,
-        formData
+        formData,
+        { withCredentials: true }
       );
 
       console.log("Signup Response:", res.data);
-      alert("Account created successfully! Please login.");
-      navigate('/login');
+      setSuccess("Account created successfully! Redirecting to login...");
+      setTimeout(() => navigate('/login'), 2000);
 
     } catch (err) {
       console.error("Signup Error:", err);
       if (err.response?.data?.message) {
-        alert(err.response.data.message);
+        setError(err.response.data.message);
       } else if(err.message) {
-        alert("Error: " + err.message);
+        setError("Error: " + err.message);
       } else {
-        alert("Signup failed! Please try again.");
+        setError("Signup failed! Please try again.");
       }
     } finally {
       setLoading(false);
@@ -56,44 +62,52 @@ export default function Signup() {
 
   return (
     <div className="login-container">
-      <form className="login-card" onSubmit={handleSubmit}>
-        <h2>Sign Up</h2>
+      <div className="login-wrapper">
+        <div className="login-header">
+          <h1 className="brand-logo">Sarekart</h1>
+          <p className="brand-tagline">Join our community</p>
+        </div>
+        
+        <form className="login-card" onSubmit={handleSubmit}>
+          <h2>Create Your Account</h2>
+          
+          {error && <div className="error-message">{error}</div>}
+          {success && <div className="success-message">{success}</div>}
 
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={formData.username}
-          required
-          onChange={handleChange}
-        />
+          <div className="form-group">
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={formData.username}
+              required
+              onChange={handleChange}
+              className="form-input"
+            />
+          </div>
 
-        <input
-          type="text"
-          name="phone"
-          placeholder="Phone Number"
-          value={formData.phone}
-          required
-          onChange={handleChange}
-        />
+          <div className="form-group">
+            <input
+              type="text"
+              name="phone"
+              placeholder="Phone Number"
+              value={formData.phone}
+              required
+              onChange={handleChange}
+              className="form-input"
+            />
+          </div>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          required
-          onChange={handleChange}
-        />
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Signing up..." : "Sign Up"}
-        </button>
+          <button type="submit" disabled={loading} className="login-btn">
+            {loading ? "Creating Account..." : "Sign Up"}
+          </button>
 
-        <p className="signup-text">
-          Already have an account? <span onClick={() => navigate('/login')}>Login</span>
-        </p>
-      </form>
+          <p className="signup-text">
+            Already have an account? <span onClick={() => navigate('/login')}>Login</span>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }

@@ -11,6 +11,7 @@ export default function BuyNowPage() {
   const [paymentMethod, setPaymentMethod] = useState("COD");
   const [total, setTotal] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
 
   const [address, setAddress] = useState({
     name: "",
@@ -48,7 +49,7 @@ export default function BuyNowPage() {
       setIsProcessing(true);
        const API_BASE_URL = window.location.hostname === 'localhost'
   ? 'http://localhost:4000'
-  : 'https://sare-kart-backend.onrender.com';
+  : 'https://sare-kart-backend-production.up.railway.app/';
 const res = await axios.post(`${API_BASE_URL}/api/v1/sarekart/useradress`,address);
       const savedAddress = res.data || address;
       localStorage.setItem("deliveryAddress", JSON.stringify(savedAddress));
@@ -71,27 +72,48 @@ const res = await axios.post(`${API_BASE_URL}/api/v1/sarekart/useradress`,addres
       cart,
       total,
       address,
-      paymentMethod
+      paymentMethod,
+      userid // Get user ID from localStorage or cookies
     };
     try {
       setIsProcessing(true);
        const API_BASE_URL = window.location.hostname === 'localhost'
   ? 'http://localhost:4000'
-  : 'https://sare-kart-backend.onrender.com';
-const res = await axios.post(`${API_BASE_URL}/api/v1/sarekart/createorder`,orderData);
+  : 'https://sare-kart-backend-production.up.railway.app/';
+const res = await axios.post(`${API_BASE_URL}/api/v1/sarekart/createorder`,orderData, {
+        withCredentials: true // Include cookies for userid
+      });
       const placedOrder = res.data || orderData;
       localStorage.setItem("latestOrder", JSON.stringify(placedOrder));
-      navigate('/order-confirm');
+      
+      // Show success animation
+      setShowSuccessAnimation(true);
+      
+      // Redirect after animation completes (2.5 seconds)
+      setTimeout(() => {
+        navigate('/');
+      }, 2500);
     } catch (err) {
       console.error(err);
       alert('Failed to place order. Please try again.');
-    } finally {
       setIsProcessing(false);
     }
   }
 
   return (
     <div className="buy-container container mt-4">
+      {showSuccessAnimation && (
+        <div className="success-modal-overlay">
+          <div className="success-modal">
+            <div className="success-checkmark">
+              <div className="checkmark-circle"></div>
+              <div className="checkmark-line"></div>
+            </div>
+            <h2 className="success-title">Order Placed Successfully!</h2>
+            <p className="success-message">Thank you for your order. Redirecting to home page...</p>
+          </div>
+        </div>
+      )}
       <h2 className="buynow-title">Buy Now</h2>
 
       <div className="buy-grid">
