@@ -1,0 +1,50 @@
+/* Admin Dashboard (scoped) */
+.adm-container{ max-width:1200px; margin:24px auto; padding:20px }
+.adm-title{ font-size:24px; font-weight:800; margin-bottom:12px; color:#111 }
+.adm-actions{ display:flex; gap:10px; margin-bottom:18px }
+.adm-btn{ padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700 }
+.adm-btn-outline{ background:#fff; border:1px solid #ddd }
+.adm-btn-primary{ background:linear-gradient(90deg,#667eea,#764ba2); color:#fff; border:none }
+.adm-empty{ padding:16px; color:#666; background:#fff; border-radius:8px }
+
+.adm-order-card{ background:#fff; border-radius:12px; padding:16px; margin-bottom:18px; box-shadow:0 6px 18px rgba(16,24,40,0.04); border:1px solid #f0f0f0 }
+.adm-order-header{ display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom:12px }
+.adm-muted{ color:#718096; font-size:13px; margin-top:6px }
+.adm-order-meta{ display:flex; gap:12px; align-items:flex-start; color:#2d3748 }
+
+.adm-order-body{ display:flex; gap:18px; flex-wrap:wrap }
+.adm-order-items{ flex:1 1 0; min-width:0 }
+.adm-order-item{ display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px dashed #f3f3f3 }
+.adm-order-item img{ width:84px; height:84px; object-fit:cover; border-radius:8px }
+.adm-item-info{ flex:1 }
+.adm-item-name{ font-weight:700; color:#111 }
+.adm-item-q{ color:#666; margin-top:6px }
+.adm-item-price{ font-weight:800; color:#e11d48 }
+
+.adm-order-address{ flex:0 0 280px; max-width:100%; min-width:0; padding-left:12px; border-left:1px solid #f5f5f5 }
+.adm-order-address p, .adm-order-address div{ word-break:break-word; overflow-wrap:break-word; white-space:normal }
+.adm-item-info, .adm-order-items{ min-width:0 }
+
+/* Prevent horizontal overflow and make wrapper horizontally scrollable if needed */
+.adm-container{ box-sizing:border-box; overflow-x:hidden }
+.adm-orders-wrapper{ width:100%; overflow-x:auto }
+.adm-order-address h5{ margin-top:0 }
+
+/* Responsive tweaks */
+@media (max-width:900px){
+  .adm-order-body{ flex-direction:column }
+  .adm-order-address{ border-left:none; padding-left:0 }
+}
+
+/* Mobile-specific tweaks */
+@media (max-width:600px){
+  .adm-container{ padding:12px }
+  .adm-order-card{ padding:12px }
+  .adm-order-item img{ width:64px; height:64px }
+  .adm-order-items{ flex-basis:100% }
+  .adm-order-address{ flex-basis:100%; padding-left:0; border-left:none; margin-top:10px }
+  .adm-order-header{ flex-direction:column; align-items:flex-start }
+  .adm-order-meta{ flex-direction:column; gap:6px }
+  .adm-item-info{ min-width:0 }
+  .adm-item-name{ overflow-wrap:anywhere }
+}

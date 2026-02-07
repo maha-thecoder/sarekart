@@ -28,16 +28,13 @@ export default function Login() {
     try{
       const API_BASE_URL = window.location.hostname === 'localhost'
         ? 'http://localhost:4000'
-        : 'https://sare-kart-backend.onrender.com';
+        : 'https://sare-kart-backend-production.up.railway.app';
       const res = await axios.post(`${API_BASE_URL}/api/v1/sarekart/login`,formData, {
         withCredentials: true
       });
       console.log(res)
       console.log("Form Data Submitted:", res.data);
-      // Store user ID in localStorage
-      if (res.data.data._id) {
-        localStorage.setItem('uid', res.data.data._id);
-      }
+      // Cookie is set by backend; navigate to main site
       navigate('/')
     }
     catch(err){

@@ -26,8 +26,8 @@ export default function Cart() {
   const refresh = () => setCart(getCart());
   const increaseQty = (id) => {
     const updatedCart = cart.map(item =>
-      item.id === id
-        ? { ...item, qty: item.qty + 1 }
+      (item._id === id || item.id === id)
+        ? { ...item, qty: (Number(item.qty) || 1) + 1 }
         : item
     );
 
@@ -37,8 +37,8 @@ export default function Cart() {
 
   const decreaseQty = (id) => {
   const updatedCart = cart.map(item =>
-    item.id === id
-      ? { ...item, qty: item.qty > 1 ? item.qty - 1 : 1 }
+    (item._id === id || item.id === id)
+      ? { ...item, qty: (Number(item.qty) > 1 ? Number(item.qty) - 1 : 1) }
       : item
   );
 
@@ -87,14 +87,14 @@ export default function Cart() {
 
               <div className="item-right">
                 <div className="qty-controls">
-                  <button className="qty-btn" onClick={() => { decreaseQty(item.id); refresh(); }}>−</button>
+                  <button className="qty-btn" onClick={() => { decreaseQty(item._id); refresh(); }}>−</button>
                   <span className="qty-value">{qtyValue}</span>
-                  <button className="qty-btn" onClick={() => { increaseQty(item.id); refresh(); }}>+</button>
+                  <button className="qty-btn" onClick={() => { increaseQty(item._id); refresh(); }}>+</button>
                 </div>
 
                 <div className="item-total">{`RS.${itemTotal}`}</div>
 
-                <button className="btn btn-danger remove-btn" onClick={() => { removeFromCart(item.id); refresh(); }}>Remove</button>
+                <button className="btn btn-danger remove-btn" onClick={() => { removeFromCart(item._id || item.id); refresh(); }}>Remove</button>
               </div>
             </div>
           )

@@ -98,9 +98,10 @@
 }
 
 @media (max-width: 767px){
+    .container{ padding-bottom: 100px }
     .cart-item{ flex-direction: column; align-items: stretch }
     .cart-item .item-left img{ width:100%; height:200px }
     .item-right{ align-items: flex-start; flex-direction: row; justify-content: space-between }
     .item-total{ margin-left: 8px }
-    .buy-opt{ justify-content:center }
+    .buy-opt{ justify-content:center; margin-bottom: 20px }
 }

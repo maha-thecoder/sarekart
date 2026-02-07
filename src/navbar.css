@@ -26,3 +26,22 @@
   .profile{
     cursor: pointer;
   }
+
+/* Topbar styles */
+.topbar{ background: linear-gradient(90deg,#fff,#fff); border-bottom:1px solid #eee }
+.topbar-inner{ max-width:1200px; margin:0 auto; display:flex; align-items:center; gap:16px; padding:12px 16px }
+.brand img{ height:44px; cursor:pointer }
+.search-wrap{ flex:1 }
+.search-input{ width:100%; padding:10px 14px; border-radius:24px; border:1px solid #e6e6e6; box-shadow: inset 0 1px 2px rgba(0,0,0,0.03) }
+.top-actions{ display:flex; gap:8px; align-items:center }
+.icon-btn{ background:transparent; border:1px solid #eee; padding:8px 12px; border-radius:8px; cursor:pointer }
+.profile-btn{ background:linear-gradient(90deg,#667eea,#764ba2); color:white; border:none; padding:8px 12px; border-radius:8px }
+
+/* Bottom nav */
+.bottom-nav{ position:fixed; left:0; right:0; bottom:0; height:64px; background:#fff; border-top:1px solid #eee; display:none; justify-content:space-around; align-items:center; z-index:1200 }
+.bottom-item{ background:transparent; border:none; display:flex; flex-direction:column; gap:4px; align-items:center; font-size:14px; cursor:pointer }
+
+@media (max-width:768px){
+  .bottom-nav{ display:flex }
+  .topbar-inner .search-wrap{ display:none }
+}

@@ -72,14 +72,14 @@ const res = await axios.post(`${API_BASE_URL}/api/v1/sarekart/useradress`,addres
       cart,
       total,
       address,
-      paymentMethod,
-      userid // Get user ID from localStorage or cookies
+      paymentMethod
+      // userid from httpOnly cookie sent via withCredentials
     };
     try {
       setIsProcessing(true);
        const API_BASE_URL = window.location.hostname === 'localhost'
   ? 'http://localhost:4000'
-  : 'https://sare-kart-backend-production.up.railway.app/';
+  : 'https://sare-kart-backend-production.up.railway.app';
 const res = await axios.post(`${API_BASE_URL}/api/v1/sarekart/createorder`,orderData, {
         withCredentials: true // Include cookies for userid
       });
@@ -95,7 +95,8 @@ const res = await axios.post(`${API_BASE_URL}/api/v1/sarekart/createorder`,order
       }, 2500);
     } catch (err) {
       console.error(err);
-      alert('Failed to place order. Please try again.');
+      const errorMsg = err.response?.data?.message || 'Failed to place order. Please try again.';
+      alert(errorMsg);
       setIsProcessing(false);
     }
   }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
-import "./admin.css";
+import "./admin-dashboard.css";
 
 export default function AdminDashboard() {
   const [orders, setOrders] = useState([]);
@@ -15,7 +15,7 @@ export default function AdminDashboard() {
         setLoading(true);
         const API_BASE_URL = window.location.hostname === 'localhost'
           ? 'http://localhost:4000'
-          : 'https://sare-kart-backend.onrender.com';
+          : 'https://sare-kart-backend-production.up.railway.app';
         const res = await axios.get(`${API_BASE_URL}/api/v1/sarekart/orders`);
         setOrders(res.data?.data || []);
         
@@ -40,65 +40,65 @@ export default function AdminDashboard() {
   };
 
   if (loading) return (
-    <div className="admin-container">
-      <div className="spinner-border text-primary" role="status"></div>
+    <div className="adm-container">
+      <div className="adm-spinner" role="status"></div>
     </div>
   );
 
   if (error) return (
-    <div className="admin-container">
-      <div className="alert alert-danger">{error}</div>
+    <div className="adm-container">
+      <div className="adm-alert">{error}</div>
     </div>
   );
 
   return (
-    <div className="admin-container container mt-4">
-      <h2 className="admin-title">Admin — Orders</h2>
-      <div className="admin-actions mb-3">
-        <button className="btn btn-outline-primary me-2" onClick={() => navigate('/admin-orders')}>All Orders</button>
-        <button className="btn btn-primary" onClick={() => navigate('/admin-add-saree')}>Add Saree</button>
+    <div className="adm-container container mt-4">
+      <h2 className="adm-title">Admin — Orders</h2>
+      <div className="adm-actions mb-3">
+        <button className="adm-btn adm-btn-outline" onClick={() => navigate('/admin-orders')}>All Orders</button>
+        <button className="adm-btn adm-btn-primary" onClick={() => navigate('/admin-add-saree')}>Add Saree</button>
       </div>
-      {orders.length === 0 && <div className="p-3">No orders found.</div>}
+      {orders.length === 0 && <div className="adm-empty">No orders found.</div>}
 
       {orders.map(order => {
         
         
         const address = order.deliveryAddress || order.addressSnapshot || {};
         return (
-          <div className="order-card" key={order._id}>
-            <div className="order-header">
+          <div className="adm-order-card" key={order._id}>
+            <div className="adm-order-header">
               <div>
                 <strong>Order:</strong> {order._id}
-                <div className="muted">{new Date(order.createdAt).toLocaleString()}</div>
+                <div className="adm-muted">{new Date(order.createdAt).toLocaleString()}</div>
               </div>
-              <div className="order-meta">
+              <div className="adm-order-meta">
                 <div><strong>Status:</strong> {order.status}</div>
                 <div><strong>Payment:</strong> {order.paymentMethod}</div>
                 <div><strong>Total:</strong> RS.{order.total}</div>
               </div>
             </div>
 
-            <div className="order-body">
-              <div className="order-items">
+            <div className="adm-order-body">
+              <div className="adm-order-items">
                 {Array.isArray(order.cart) && order.cart.map((item, idx) => {
                   
                    const priceValue = Number(item.sareprice) || 0;
           const qtyValue = Number(item.qty) || 1;
           const itemTotal = priceValue * qtyValue;
                   return (
-                    <div className="order-item" key={idx}>
+                    <div className="adm-order-item" key={idx}>
                       <img src={item.sareimg} alt={item.sarename} />
-                      <div className="item-info">
-                        <div className="item-name">{item.sarename}</div>
-                        <div className="item-q">Qty: {qtyValue}</div>
+                      <div className="adm-item-info">
+                        <div className="adm-item-name">{item.sarename}</div>
+                        <div className="adm-item-q">Qty: {qtyValue}</div>
                       </div>
-                      <div className="item-price">RS.{itemTotal}</div>
+                      <div className="adm-item-price">RS.{itemTotal}</div>
                     </div>
                   )
                 })}
               </div>
 
-              <div className="order-address">
+              <div className="adm-order-address">
                 <h5>Delivery Address</h5>
                 <div>{address.name}</div>
                 <div>{address.mobile}</div>

@@ -5,27 +5,33 @@ import Carousel from './cariusel'
 import Cards from './cards'
 import Cartpage from './cartpage'
 import BuyNowPage from './buynowpage.jsx'
-import Login from '../login/Login.jsx'
-import Signup from '../login/Signup.jsx'
+import Login from './login/Login.jsx'
+import Signup from './login/Signup.jsx'
 import AdminDashboard from './AdminDashboard'
 import AddSare from './AddSare'
-import OrderPage from './OrderPage'
-import { Routes,Route } from 'react-router-dom' 
+import OrderPage from './OrderPage.jsx'
+import AuthRoute from './authroute.jsx'
+import { Routes,Route, useLocation } from 'react-router-dom' 
 
 
 function App() {
-  
-
   return (
     <>
-    <Navbar/>
+    {/* Hide navbar on login and signup pages */}
+    <NavbarWrapper />
     <Routes>
 
       <Route path='/' element={
+        <AuthRoute>
         <>
+        
         <Carousel/>
         <Cards/>
+        
+        
         </>
+         </AuthRoute>
+        
       }/>
 
       <Route path='/signup' element={
@@ -78,3 +84,10 @@ function App() {
 }
 
 export default App
+
+function NavbarWrapper(){
+  const location = useLocation();
+  const hideNavbarPaths = ['/login', '/signup'];
+  if(hideNavbarPaths.includes(location.pathname)) return null;
+  return <Navbar />;
+}

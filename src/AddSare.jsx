@@ -26,7 +26,7 @@ export default function AddSare() {
       setIsSubmitting(true);
       const API_BASE_URL = window.location.hostname === 'localhost'
         ? 'http://localhost:4000'
-        : 'https://sare-kart-backend.onrender.com';
+        : 'https://sare-kart-backend-production.up.railway.app';
 
       const payload = {
         sarename: form.sarename,

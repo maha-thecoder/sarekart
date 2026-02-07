@@ -25,7 +25,7 @@ export const addingitems=(product)=>{
 
     export const removeFromCart=(product)=>{
         const cart=getCart()
-        const filtercart=cart.filter(item=>item.id!==product)
+        const filtercart=cart.filter(item=>!(item._id===product || item.id===product))
         savecart(filtercart)
     }
 
@@ -43,7 +43,7 @@ export const addingitems=(product)=>{
     export const singleitemprice=(id)=>{
         
         const cart=getCart()
-        const item = cart.find(i => i.id === id)
+        const item = cart.find(i => i._id === id || i.id === id)
         if (!item) return 0
 
         const price = Number((item.sareprice || "").toString().replace("RS.", "")) || 0

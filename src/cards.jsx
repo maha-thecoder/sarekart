@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { addingitems } from "./utilities/cart";
 import axios from 'axios';
 import './card.css'
+import './cards-ui.css'
+import { useNavigate } from 'react-router-dom'
 
 export default function Cards() {
 
@@ -15,7 +17,7 @@ export default function Cards() {
         setLoading(true);
         const API_BASE_URL = window.location.hostname === 'localhost'
           ? 'http://localhost:4000'
-          : 'https://sare-kart-backend.onrender.com';
+          : 'https://sare-kart-backend-production.up.railway.app';
         const res = await axios.get(`${API_BASE_URL}/api/v1/sarekart/saredetails`);
         setSarees(res.data?.data || []);
       } catch (err) {
@@ -28,11 +30,19 @@ export default function Cards() {
     fetch();
   }, []);
 
-const addtocart=(sareimg)=>{
-    localStorage.setItem("imgsrc",{sareimg})
-    alert("saree added")
+  const navigate = useNavigate()
 
-n  }
+  const handleAddToCart = (saree) => {
+    addingitems(saree)
+    // small toast-ish feedback
+    alert('Added to cart')
+  }
+
+  const handleBuyNow = (saree) => {
+    // Save selected item for buy now flow and navigate
+    localStorage.setItem('buyNowItem', JSON.stringify({ ...saree, qty: 1 }))
+    navigate('/buy-now-page')
+  }
 
     
   return (
@@ -43,29 +53,22 @@ n  }
             className="col-lg-4 col-md-6 col-sm-12"
             key={saree._id}
           >
-            <div className="card my-3" style={{ height: "580px" }}>
-              <img
-                src={saree.sareimg}
-                className="card-img-top img-fluid"
-                alt={saree.sarename}
-                style={{ height: "400px", objectFit: "cover" }}
-              />
-             
+            <div className="product-card my-3">
+              <div className="media">
+                <img src={saree.sareimg} alt={saree.sarename} className="media-img" />
+              </div>
 
-              <div className="details">
-                <p className="saree-name">{saree.sarename}</p>
-                <div className="price-style">
-                <p className="price-tag">RS.{saree.sareprice}</p>
-                <p className="strike-price">RS.{saree.wrongprice}</p>
+              <div className="product-body">
+                <h3 className="product-title">{saree.sarename}</h3>
+                <div className="product-meta">
+                  <div className="price">₹{saree.sareprice}</div>
+                  <div className="mrp">₹{saree.wrongprice}</div>
+                </div>
+                <div className="product-actions">
+                  <button className="btn btn-add" onClick={() => handleAddToCart(saree)}>Add to cart</button>
+                  <button className="btn btn-buy" onClick={() => handleBuyNow(saree)}>Buy now</button>
                 </div>
               </div>
-
-               <div className="box">
-                <p className="add-cart" onClick={()=>addingitems(saree)}>Add To Cart</p>
-                <p className="buy-now">Buy Now</p>
-              </div>
-
-
             </div>
           </div>
         ))}
